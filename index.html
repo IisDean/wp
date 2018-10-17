@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="favicon.ico" rel="shortcut icon" />
+    <style type="text/css">
+    .outSide {
+        margin-top: 15px;
+    }
+</style>
+</head>
+<body>
+    <div class="container outSide">
+      <div class="row">
+        <div class="col-md-3 col-md-offset-1">
+            <input type="button" class="btn btn-default" value="登录/注册" data-toggle="modal" data-target=".myModal">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">注册登录框</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>用户名:</label>
+            <input type="text" name="" class="form-control J-user-node">
+        </div>
+        <div class="form-group">
+            <label>密码:</label>
+            <input type="password" name="" class="form-control J-pass-node">
+        </div>
+        <button class="btn btn-primary J-res-btn">注册</button>
+        <button class="btn btn-default">登录</button>
+    </div>
+</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    
+    //this js for dean
+    (()=>{
+        $(".J-res-btn").on({
+            click(){
+                $.ajax({
+                    url: 'http://localhost:8020/login/res',
+                    type: 'get',
+                    data: {
+                        'user': $('.J-user-node').val(),
+                        'pass': $(".J-pass-node").val(),
+                    },
+                    success: function(data){
+                        if(data.ok == 1){
+                            alert(data.msg);
+                        }else{
+                            alert(data.msg);
+                        }
+                    },
+                })
+            }
+        })
+    })();
+
+</script>
+</body>
+</html>
