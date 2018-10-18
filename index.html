@@ -17,12 +17,12 @@
     <div class="container outSide">
       <div class="row">
         <div class="col-md-3 col-md-offset-1">
-            <input type="button" class="btn btn-default" value="登录/注册" data-toggle="modal" data-target=".myModal">
+            <button type="button" class="btn btn-default J-login-show" data-toggle="modal" data-target=".myModal1">登录/注册</button>
         </div>
     </div>
 </div>
 
-<div class="modal fade myModal" tabindex="-1" role="dialog">
+<div class="modal fade myModal1" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -30,16 +30,18 @@
         <h4 class="modal-title">注册登录框</h4>
     </div>
     <div class="modal-body">
-        <div class="form-group">
-            <label>用户名:</label>
-            <input type="text" name="" class="form-control J-user-node">
-        </div>
-        <div class="form-group">
-            <label>密码:</label>
-            <input type="password" name="" class="form-control J-pass-node">
+        <div class="form-wrap">
+            <div class="form-group">
+                <label>用户名:</label>
+                <input type="text" name="" class="form-control J-user-node">
+            </div>
+            <div class="form-group">
+                <label>密码:</label>
+                <input type="password" name="" class="form-control J-pass-node">
+            </div>
         </div>
         <button class="btn btn-primary J-res-btn">注册</button>
-        <button class="btn btn-default">登录</button>
+        <button class="btn btn-default J-login-btn">登录</button>
     </div>
 </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
@@ -51,6 +53,15 @@
     
     //this js for dean
     (()=>{
+
+        //显示登录/注册弹窗
+        $(".J-login-show").on("click",function(){
+            $('.J-user-node').val('');
+            $(".J-pass-node").val('');
+            $("form-wrap .form-group").removeClass('has-error');
+        });
+
+        //注册
         $(".J-res-btn").on({
             click(){
                 $.ajax({
@@ -62,14 +73,41 @@
                     },
                     success: function(data){
                         if(data.ok == 1){
-                            alert(data.msg);
+                            console.log(data.msg);
+                            $("form-wrap .form-group").removeClass('has-error');
                         }else{
-                            alert(data.msg);
+                            console.log(data.msg);
+                            $("form-wrap .form-group").addClass('has-error');
                         }
                     },
-                })
+                });
+            }
+        });
+
+        //登录
+        $(".J-login-btn").on({
+            click(){
+                $.ajax({
+                    url: 'http://localhost:8020/login/login',
+                    type: 'get',
+                    data: {
+                        'user': $('.J-user-node').val(),
+                        'pass': $(".J-pass-node").val(),
+                    },
+                    success: function(data){
+                        if(data.ok == 1){
+                            console.log(data.msg);
+                            $(".myModal1").modal('hide');
+                            $("form-wrap .form-group").removeClass('has-error');
+                        }else{
+                            console.log(data.msg);
+                            $("form-wrap .form-group").addClass('has-error');
+                        }
+                    },
+                });
             }
         })
+
     })();
 
 </script>
