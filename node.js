@@ -5,11 +5,40 @@ var express = require('express'),
 	multer = require('multer');
 
 var server = express();
+var fileRouter = express.Router();
 var loginRouter = express.Router();
 
 server.listen(8020);
+server.use(multer({dest:'./lib'}).any());
 
+server.use('/file',fileRouter);
 server.use('/login',loginRouter);
+
+fileRouter.use('/upload',(req,res)=>{
+	console.log(req.files);
+	var newName = path.parse(req.files[0].originalname).ext
+	fs.rename(req.files[0].path,req.files[0].path+newName,(err)=>{
+		if( err ){
+			res.send(err);
+		}else{
+			var Pool = mysql.createPool({
+				'host': 'localhost',
+				'user': 'root',
+				'password': 'root',
+				'database': 'wp'
+			});
+			Pool.getConnection((err,conn)=>{
+				if( err ){
+					res.send({'status': 0,'msg': '数据库连接失败'});
+					conn.end();
+				}else{
+					
+				}
+			});
+			res.send({status: 1,msg: '上传成功！'});
+		}
+	});
+});
 
 loginRouter.use('/res',(req,res)=>{
 	// console.log(req.query);
@@ -36,16 +65,23 @@ loginRouter.use('/res',(req,res)=>{
 							res.send({'ok': 0,'msg': '数据库连接失败'});
 							conn.end();
 						}else{
-							res.send({'ok': 1,'msg': '恭喜您,注册成功!'});
 							conn.query(`CREATE TABLE ${req.query.user}
-									(
-										ID int(255) NOT NULL AUTO_INCREMENT,
-										LastName varchar(255) NOT NULL,
-										hashName varchar(255) NOT NULL,
-										lastTime varchar(255) NOT NULL,
-										type varchar(255),
-									)
-								`);
+								(
+									ID int(255) NOT NULL AUTO_INCREMENT,
+									LastName varchar(255) NOT NULL,
+									hashName varchar(255) NOT NULL,
+									lastTime varchar(255) NOT NULL,
+									size varchar(255) NOT NULL,
+									download varchar(255) NOT NULL,
+									PRIMARY KEY (ID)
+							)`,(err,data)=>{
+								if( err ){
+									res.send(err);
+								}else{
+									res.send({'ok': 1,'msg': '恭喜您,注册成功!'});
+								}
+							});
+							conn.end();
 						}
 					});
 				}

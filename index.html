@@ -22,6 +22,37 @@
     </div>
 </div>
 
+<div class="container file-container hide">
+    <table class="table text-center table-hover">
+        <thead>
+            <tr>
+                <td>序号</td>
+                <td>文件名</td>
+                <td>文件大小</td>
+                <td>上传时间</td>
+                <td>下载次数</td>
+                <td>是否删除</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>zh.jpg</td>
+                <td>2.3M</td>
+                <td>2018-11-13</td>
+                <td>3</td>
+                <td><input type="button" class="btn btn-default btn-danger btn-xs" name="" value="删除"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="form-wrap">     
+        <div class="form-group">
+            <input type="file" id="fileNode" name="" />
+        </div>
+        <input type="button" class="btn btn-primary J-upload-btn" value="上传文件" />
+    </div>
+</div>
+
 <div class="modal fade myModal1" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -33,11 +64,11 @@
         <div class="form-wrap">
             <div class="form-group">
                 <label>用户名:</label>
-                <input type="text" name="" class="form-control J-user-node">
+                <input type="text" name="" value="dean" class="form-control J-user-node">
             </div>
             <div class="form-group">
                 <label>密码:</label>
-                <input type="password" name="" class="form-control J-pass-node">
+                <input type="password" name="" value="123456" class="form-control J-pass-node">
             </div>
         </div>
         <button class="btn btn-primary J-res-btn">注册</button>
@@ -56,8 +87,8 @@
 
         //显示登录/注册弹窗
         $(".J-login-show").on("click",function(){
-            $('.J-user-node').val('');
-            $(".J-pass-node").val('');
+            // $('.J-user-node').val('');
+            // $(".J-pass-node").val('');
             $("form-wrap .form-group").removeClass('has-error');
         });
 
@@ -99,6 +130,7 @@
                             console.log(data.msg);
                             $(".myModal1").modal('hide');
                             $("form-wrap .form-group").removeClass('has-error');
+                            $(".file-container").removeClass('hide');
                         }else{
                             console.log(data.msg);
                             $("form-wrap .form-group").addClass('has-error');
@@ -106,7 +138,23 @@
                     },
                 });
             }
-        })
+        });
+
+        //文件上传
+        $(".J-upload-btn").on("click",function(){
+            var oForm = new FormData();
+            oForm.append('files', fileNode.files[0]);
+            if( window.XMLHttpRequest ){
+                var xhr = new XMLHttpRequest();
+            }else{
+                var xhr = new ActiveXObject('Microsoft.XMPHTTP');
+            }
+            xhr.open('post','http://localhost:8020/file/upload', true);
+            xhr.send(oForm);
+            xhr.onload = ()=>{
+                console.log(xhr.responseText);
+            }
+        });
 
     })();
 
