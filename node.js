@@ -32,7 +32,7 @@ fileRouter.use('/upload',(req,res)=>{
 					res.send({'status': 0,'msg': '数据库连接失败'});
 					conn.end();
 				}else{
-					
+					conn.query('INSERT INTO'+ req.files[0].)
 				}
 			});
 			res.send({status: 1,msg: '上传成功！'});

@@ -14,8 +14,10 @@
 </style>
 </head>
 <body>
-    <div class="container outSide">
-      <div class="row">
+<input type="hidden" id="userName" value="" name=""/>
+
+<div class="container outSide">
+    <div class="row">
         <div class="col-md-3 col-md-offset-1">
             <button type="button" class="btn btn-default J-login-show" data-toggle="modal" data-target=".myModal1">登录/注册</button>
         </div>
@@ -80,84 +82,6 @@
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script type="text/javascript">
-    
-    //this js for dean
-    (()=>{
-
-        //显示登录/注册弹窗
-        $(".J-login-show").on("click",function(){
-            // $('.J-user-node').val('');
-            // $(".J-pass-node").val('');
-            $("form-wrap .form-group").removeClass('has-error');
-        });
-
-        //注册
-        $(".J-res-btn").on({
-            click(){
-                $.ajax({
-                    url: 'http://localhost:8020/login/res',
-                    type: 'get',
-                    data: {
-                        'user': $('.J-user-node').val(),
-                        'pass': $(".J-pass-node").val(),
-                    },
-                    success: function(data){
-                        if(data.ok == 1){
-                            console.log(data.msg);
-                            $("form-wrap .form-group").removeClass('has-error');
-                        }else{
-                            console.log(data.msg);
-                            $("form-wrap .form-group").addClass('has-error');
-                        }
-                    },
-                });
-            }
-        });
-
-        //登录
-        $(".J-login-btn").on({
-            click(){
-                $.ajax({
-                    url: 'http://localhost:8020/login/login',
-                    type: 'get',
-                    data: {
-                        'user': $('.J-user-node').val(),
-                        'pass': $(".J-pass-node").val(),
-                    },
-                    success: function(data){
-                        if(data.ok == 1){
-                            console.log(data.msg);
-                            $(".myModal1").modal('hide');
-                            $("form-wrap .form-group").removeClass('has-error');
-                            $(".file-container").removeClass('hide');
-                        }else{
-                            console.log(data.msg);
-                            $("form-wrap .form-group").addClass('has-error');
-                        }
-                    },
-                });
-            }
-        });
-
-        //文件上传
-        $(".J-upload-btn").on("click",function(){
-            var oForm = new FormData();
-            oForm.append('files', fileNode.files[0]);
-            if( window.XMLHttpRequest ){
-                var xhr = new XMLHttpRequest();
-            }else{
-                var xhr = new ActiveXObject('Microsoft.XMPHTTP');
-            }
-            xhr.open('post','http://localhost:8020/file/upload', true);
-            xhr.send(oForm);
-            xhr.onload = ()=>{
-                console.log(xhr.responseText);
-            }
-        });
-
-    })();
-
-</script>
+<script src="js/index.js" type="text/javascript"></script>
 </body>
 </html>
