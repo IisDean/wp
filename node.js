@@ -42,9 +42,16 @@ fileRouter.use('/upload',(req,res)=>{
 							console.log(err);
 							res.send({status: 0,msg: '数据库连接失败'});
 						}else{
-							res.send({status: 1,msg: '上传成功！',LastName: req.files[0].originalname,hashName: hashName,lastTime: lastTime,size: size});
-						}	
-						conn.end();				
+							conn.query('INSERT INTO `all_files` (`LastName`,`hashName`,`lastTime`,`size`,`download`,`user`) VALUES("'+ req.files[0].originalname +'","'+ hashName +'","'+ lastTime +'","'+ size+'","0","'+ req.body.userName +'");', (err)=>{
+								if( err ){
+									console.log(err);
+									res.send({status: 0,msg: '数据库连接失败'});
+								}else{
+									res.send({status: 1,msg: '上传成功！',LastName: req.files[0].originalname,hashName: hashName,lastTime: lastTime,size: size});
+								}
+								conn.end();		
+							});	
+						}			
 					});				
 				}
 			});
@@ -55,26 +62,32 @@ fileRouter.use('/upload',(req,res)=>{
 //删除
 fileRouter.use('/delete',(req,res)=>{
 	console.log(req.query.hashName);
-	var Pool = mysql.createPool({
-		'host': 'localhost',
-		'user': 'root',
-		'password': 'root',
-		'database': 'wp'
-	});
-	Pool.getConnection((err,conn)=>{
+	fs.unlink('./lib/'+req.query.hashName,function(err){
 		if( err ){
-			cosole.log(err);
-			res.send({'status': 0, msg: '数据库连接失败'});
-			conn.end();
+			console.log(err);
+			res.send({'status': 0, msg: '删除失败'});
 		}else {
-			conn.query('DELETE FROM `'+ req.query.userName +'` WHERE `hashName`="'+ req.query.hashName +'";',(err)=>{
+			var Pool = mysql.createPool({
+				'host': 'localhost',
+				'user': 'root',
+				'password': 'root',
+				'database': 'wp'
+			});
+			Pool.getConnection((err,conn)=>{
 				if( err ){
-					console.log(err);
+					cosole.log(err);
 					res.send({'status': 0, msg: '数据库连接失败'});
 					conn.end();
-				}else{
-					res.send({'status': 1, msg: '删除成功'});
-					conn.end();
+				}else {
+					conn.query('DELETE FROM `'+ req.query.userName +'` WHERE `hashName`="'+ req.query.hashName +'";',(err)=>{
+						if( err ){
+							console.log(err);
+							res.send({'status': 0, msg: '数据库连接失败'});
+						}else{
+							res.send({'status': 1, msg: '删除成功'});
+						}
+						conn.end();	
+					});
 				}
 			});
 		}
