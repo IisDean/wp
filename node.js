@@ -42,7 +42,7 @@ fileRouter.use('/upload',(req,res)=>{
 							console.log(err);
 							res.send({status: 0,msg: '数据库连接失败'});
 						}else{
-							res.send({status: 1,msg: '上传成功！',lastName: req.files[0].originalname,hashName: hashName,lastTime: lastTime,size: size});
+							res.send({status: 1,msg: '上传成功！',LastName: req.files[0].originalname,hashName: hashName,lastTime: lastTime,size: size});
 						}	
 						conn.end();				
 					});				

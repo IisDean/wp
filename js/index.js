@@ -92,7 +92,8 @@
 
     //删除文件
     $("#fileWrap").on("click",'.J-delete-btn', function(){
-    	var hashName = $(this).attr('data-hash');
+    	var $this = $(this); 
+    	var hashName = $this.attr('data-hash');
     	console.log(hashName);
         $.ajax({
             url: 'http://localhost:8020/file/delete',
@@ -102,8 +103,9 @@
                 'hashName': hashName,
             },
             success: function(data){
-                if(data.ok == 1){
+                if(data.status == 1){
                     console.log(data.msg);
+                    $this.parents('tr').remove();
                 }else{
                     console.log(data.msg);
                 }
