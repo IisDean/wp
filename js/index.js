@@ -67,6 +67,7 @@
         oForm.append('files', fileNode.files[0]);
         var userName = $('.J-user-node').val();
         oForm.append('userName', userName);
+        fileNode.value = '';
         if( window.XMLHttpRequest ){
             var xhr = new XMLHttpRequest();
         }else{
